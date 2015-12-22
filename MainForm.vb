@@ -35,40 +35,43 @@ Public Partial Class MainForm
 		txtPass.Enabled = True
 		btnConnect.Enabled = True
 		cbxDatabase.Items.Clear()
-		'getDatabaseList()
+		txtLogSQL.Text = "Serveur SQL sélectionné."
 	End Sub
 	
 
 	'---------------------------------------------------------------------
-	' EVENT : Connexion au serveur SQL sélectionné 
+	' EVENT : Demande de récupération de la liste des base de données
 	'---------------------------------------------------------------------	
 	Sub BtnConnectClick(sender As Object, e As EventArgs)
-		txtLogSQL.Text = "Connexion en cours ..."
-		getDatabaseList()		
+		txtLogSQL.Text = "Demande de connexion au serveur SQL."
+		getDatabaseList()
 	End Sub
 		
 		
 	'------------------------------------------------------
-	' EVENT : choix de la base de données
+	' EVENT : Choix de la base de données
 	'------------------------------------------------------	
 	Sub CbxDatabaseSelectedIndexChanged(sender As Object, e As EventArgs)
 		txtScript.Enabled = True
-		btnScriptPath.Enabled = true
-	End Sub
-	
-	
-	'------------------------------------------------------
-	' EVENT : demande exécution du fichier de script sélectionné
-	'------------------------------------------------------
-	Sub BtnExecClick(sender As Object, e As EventArgs)
-		execSqlScript()
+		btnScriptPath.Enabled = True
+		txtLogSQL.Text = "Base de données sélectionnée."
 	End Sub
 	
 	'------------------------------------------------------
-	' EVENT : séléction du fichier de script à exécuter
+	' EVENT : Séléction du fichier de script à exécuter
 	'------------------------------------------------------
 	Sub BtnScriptPathClick(sender As Object, e As EventArgs)
 		getSqlFile()
+		txtLogSQL.Text = "Script SQL sélectionné."
+	End Sub	
+	
+	
+	'------------------------------------------------------
+	' EVENT : Demande exécution du fichier de script sélectionné
+	'------------------------------------------------------
+	Sub BtnExecClick(sender As Object, e As EventArgs)
+		txtLogSQL.Text = "Demande d'exécution du Script SQL."
+		execSqlScript()
 	End Sub
 	
 	
@@ -88,14 +91,13 @@ Public Partial Class MainForm
 			For Each dr In dt.Rows
 		    	cbxServer.Items.Add(dr.Item(0).ToString & "\" & dr.Item(1).ToString)
 			Next
-			msg = "La liste des SQL servers est à jour."
+			msg = "La liste des SQL servers a été mise à jour."
 			
 		Catch e As Exception
-			msg = "Aucun SQL server n'a pas été trouvé." & vbCrLf
+			msg = "ERREUR : " & vbCrLf
 			msg = msg & e.Message
 			
 		Finally
-			txtLogSQL.Clear()
 			txtLogSQL.Text = msg
 			dr = Nothing
 			dt =  Nothing
@@ -134,16 +136,17 @@ Public Partial Class MainForm
 			'Nettoyage de la liste avant remplissage
 			cbxDatabase.Items.Clear()
 			
-			'remplissage de la liste
+			'remplissage de la liste 
 			While reader.Read()
 				cbxDatabase.Items.Add(reader.GetString(0))
 			End While
 		
 		sqlCnx.Close()
+			msg = "La liste des bases de données est disponible."
 		cbxDatabase.Enabled = true
 
 		Catch e As Exception
-			msg = e.Message
+			msg = "ERREUR : " & e.Message
 		Finally
 			txtLogSQL.Text = msg
 		End Try
@@ -162,7 +165,7 @@ Public Partial Class MainForm
 			sqlFileDialog.ShowDialog()
 			txtScript.text = sqlFileDialog.FileName
 			Catch  e As Exception
-				txtLogSQL.text = e.message
+				txtLogSQL.text = "ERREUR : " & e.message
 			Finally
 		End Try
 	End Sub
@@ -183,8 +186,5 @@ Public Partial Class MainForm
         ' fileStream.Close()
         txtLogSQL.Text = "Exécution du script sélectionné"
 	End Sub
-	
-	
-
 	
 End Class
