@@ -129,7 +129,7 @@ Partial Class MainForm
 		Me.txtScript.Name = "txtScript"
 		Me.txtScript.Size = New System.Drawing.Size(272, 20)
 		Me.txtScript.TabIndex = 45
-		'AddHandler Me.txtScript.TextChanged, AddressOf Me.TxtScript.TextChanged
+		AddHandler Me.txtScript.TextChanged, AddressOf Me.TxtScriptTextChanged
 		'
 		'lblScript
 		'

@@ -43,8 +43,13 @@ Public Partial Class MainForm
 	' EVENT : Demande de récupération de la liste des base de données
 	'---------------------------------------------------------------------	
 	Sub BtnConnectClick(sender As Object, e As EventArgs)
-		txtLogSQL.Text = "Demande de connexion au serveur SQL."
-		getDatabaseList()
+		If ctrlSaisieServer() then
+			txtLogSQL.Text = "Demande de connexion au serveur SQL."
+			getDatabaseList()
+		Else
+			MsgBox ("Le nom du serveur SQL ne figure pas dans la liste proposée.")
+		End If
+	
 	End Sub
 		
 		
@@ -71,7 +76,12 @@ Public Partial Class MainForm
 	'------------------------------------------------------
 	Sub BtnExecClick(sender As Object, e As EventArgs)
 		txtLogSQL.Text = "Demande d'exécution du Script SQL."
-		execSqlScript()
+		If (formCompleted) then 
+			execSqlScript()
+		Else
+			msgbox ("Tous les champs ne sont pas correctement renseignés")
+		End If
+		
 	End Sub
 	
 	
@@ -122,7 +132,8 @@ Public Partial Class MainForm
 		sqlServerName = cbxServer.Text 
 		msg = ""
 		txtLogSQL.Clear()
-		cnxString = "integrated security=SSPI;data source=" & sqlServerName & ";" & "persist security info=False;initial catalog="
+		cnxString = "integrated security=SSPI;data source=" & sqlServerName & ";" _
+				  & "persist security info=False;initial catalog="
 		
 		Try
 			sqlCmd.CommandText = "SELECT name, database_id, create_date FROM sys.databases ;"
@@ -172,6 +183,21 @@ Public Partial Class MainForm
 	
 	
 	'------------------------------------------------------------
+	' Vérification de la saisie du nom du server
+	'------------------------------------------------------------	
+	Function ctrlSaisieServer() As Boolean
+		Return true
+	End Function
+	
+	
+	'------------------------------------------------------------
+	' Vérification de la complétion du formulaire
+	'------------------------------------------------------------
+	function formCompleted() as boolean
+		return true
+	End function
+	
+	'------------------------------------------------------------
 	' Exécution du script sql sélectionné
 	'------------------------------------------------------------
 	' TODO 
@@ -184,7 +210,45 @@ Public Partial Class MainForm
          '        sqlTxt = sqlTxt & reader.ReadLine
         'End Using
         ' fileStream.Close()
-        txtLogSQL.Text = "Exécution du script sélectionné"
+        Dim sqlServerName As String
+        Dim databaseName As String
+        Dim userName As String
+        Dim userPass As String
+		Dim cnxString As String
+		Dim sqlString As string
+		Dim msg As String
+		Dim result As integer
+	
+		sqlServerName = cbxServer.Text
+		databaseName = cbxDatabase.Text
+		userName = txtUser.Text
+		userPass = txtUser.Text
+		msg = ""
+		cnxString = "integrated security=SSPI;data source=" & sqlServerName & ";" _ 
+			& "persist security info=False;initial catalog=" & databaseName
+
+		sqlString = System.IO.File.ReadAllText (txtScript.text)
+		
+		Try 
+			Dim sqlCnx As New SqlClient.SqlConnection(cnxString)
+			Dim sqlCmd As New SqlCommand (sqlString, sqlCnx)
+			sqlCnx.Open()
+			result = sqlCmd.ExecuteNonQuery()
+			sqlCnx.Close()
+			msg = "Le script sélectionné a été exécuté avec succès."
+		Catch e As Exception
+			msg = "ERREUR : " & vbCrLf & e.Message
+		Finally
+			txtLogSQL.Text = msg & vbCrLf & "Resultat : " & result
+			
+		End Try
+		
 	End Sub
+	
+	
+	Sub TxtScriptTextChanged(sender As Object, e As EventArgs)
+		btnExec.Enabled = true		
+	End Sub
+	
 	
 End Class
