@@ -10,6 +10,10 @@ Imports System.data
 Imports System.Data.DataTable
 Imports System.Data.Sql
 Imports System.Data.SqlClient
+Imports System.IO
+Imports System.IO.Compression
+
+
 
 Public Partial Class MainForm
 	Public Sub New()
@@ -52,7 +56,6 @@ Public Partial Class MainForm
 	
 	End Sub
 		
-		
 	'------------------------------------------------------
 	' EVENT : Choix de la base de données
 	'------------------------------------------------------	
@@ -70,7 +73,6 @@ Public Partial Class MainForm
 		txtLogSQL.Text = "Script SQL sélectionné."
 	End Sub	
 	
-	
 	'------------------------------------------------------
 	' EVENT : Demande exécution du fichier de script sélectionné
 	'------------------------------------------------------
@@ -84,6 +86,34 @@ Public Partial Class MainForm
 		
 	End Sub
 	
+	'------------------------------------------------------
+	' EVENT : Le nom du script a été sélectionné
+	'------------------------------------------------------	
+	Sub TxtScriptTextChanged(sender As Object, e As EventArgs)
+		btnExec.Enabled = true		
+	End Sub	
+	
+	'------------------------------------------------------
+	' EVENT : Séléction de l'archive à décomprésser
+	'------------------------------------------------------		
+	Sub BtnZipClick(sender As Object, e As EventArgs)
+		getZipFile()		
+	End Sub	
+	
+	'------------------------------------------------------
+	' EVENT : Séléction du dossier web d'installation
+	'------------------------------------------------------	
+	Sub BtnDestClick(sender As Object, e As EventArgs)
+		getWebPath()		
+	End Sub	
+	
+	
+	'------------------------------------------------------
+	' EVENT : Demande de décompression de l'archive zip
+	'------------------------------------------------------	
+	Sub BtnUnzipClick(sender As Object, e As EventArgs)
+		unZipMaevaWeb()
+	End Sub
 	
 	'---------------------------------------------------------------------
 	' PROC : Création de la liste des instances SQL Server disponibles
@@ -114,7 +144,6 @@ Public Partial Class MainForm
 		End Try
 		
 	End Sub		
-	
 	
 	'---------------------------------------------------------------------
 	' PROC : Connexion au serveur sélectionné et 
@@ -164,7 +193,6 @@ Public Partial Class MainForm
 	End Sub	
 	
 	
-	
 	'--------------------------------------------------------
 	' PROC : Récupération du script sql à exécuter
 	'---------------------------------------------------------
@@ -200,16 +228,7 @@ Public Partial Class MainForm
 	'------------------------------------------------------------
 	' Exécution du script sql sélectionné
 	'------------------------------------------------------------
-	' TODO 
 	Sub execSqlScript()
-		'If (UserClickedOK = True) Then
-        'Open the selected file to read.
-       ' Dim fileStream As System.IO.Stream = sqlFileDialog.File.OpenRead
-'
-        'Using reader As New System.IO.StreamReader(fileStream)
-         '        sqlTxt = sqlTxt & reader.ReadLine
-        'End Using
-        ' fileStream.Close()
         Dim sqlServerName As String
         Dim databaseName As String
         Dim userName As String
@@ -243,15 +262,59 @@ Public Partial Class MainForm
 			msg = "ERREUR : " & vbCrLf & e.Message
 		Finally
 			txtLogSQL.Text = msg & vbCrLf & "Resultat : " & result
-			
 		End Try
 		
 	End Sub
 	
+	'--------------------------------------------------------
+	' PROC : Récupération des fichiers d'archives zip
+	'---------------------------------------------------------
+	Sub getZipFile()
+		Dim zipFileDialog As New OpenFileDialog()
+		try
+			zipFileDialog.Filter = "Archives (*.zip)|*.zip"
+			zipFileDialog.Multiselect = False
+			zipFileDialog.ShowDialog()
+			txtZip.text = zipFileDialog.FileName
+			Catch  e As Exception
+				txtLogSQL.text = "ERREUR : " & e.message
+			Finally
+		End Try
+	End Sub	
+
+	'--------------------------------------------------------
+	' PROC : Sélection du répertoire
+	'---------------------------------------------------------
+	Sub getWebPath()
+		Dim pathDialog As New FolderBrowserDialog()
+
+		If pathDialog.ShowDialog() = DialogResult.OK Then
+        	txtDest.Text = pathDialog.SelectedPath
+		End If
+		
+	End Sub		
 	
-	Sub TxtScriptTextChanged(sender As Object, e As EventArgs)
-		btnExec.Enabled = true		
+	'--------------------------------------------------------
+	' PROC : Désarchivage de l'archive web
+	'
+	' TODO : 
+	' Gérer l'erreur d'écrasement si les fichiers existent déjà
+	' proposer une demande de confirmation d'écrasement
+	'
+	'---------------------------------------------------------	
+	Sub unZipMaevaWeb()
+		
+		Dim msg As String
+		
+		Try
+			ZipFile.ExtractToDirectory (txtZip.Text, txtDest.Text)
+			msg = "L'archive a été extraite avec succès"
+		Catch e As Exception
+			msg = "ERREUR : " & vbCrLf & e.Message 
+		End Try
+			txtLogZip.Text = msg
 	End Sub
+	
 	
 	
 End Class

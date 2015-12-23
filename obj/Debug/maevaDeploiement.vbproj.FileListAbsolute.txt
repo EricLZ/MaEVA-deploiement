@@ -1,8 +1,8 @@
 C:\Users\lopeze\Documents\SharpDevelop Projects\maevaDeploiement\maevaDeploiement\bin\Debug\maevaDeploiement.exe.config
 C:\Users\lopeze\Documents\SharpDevelop Projects\maevaDeploiement\maevaDeploiement\bin\Debug\maevaDeploiement.exe
 C:\Users\lopeze\Documents\SharpDevelop Projects\maevaDeploiement\maevaDeploiement\bin\Debug\maevaDeploiement.pdb
-C:\Users\lopeze\Documents\SharpDevelop Projects\maevaDeploiement\maevaDeploiement\obj\Debug\maevaDeploiement.vbprojResolveAssemblyReference.cache
-C:\Users\lopeze\Documents\SharpDevelop Projects\maevaDeploiement\maevaDeploiement\obj\Debug\maevaDeploiement.exe
-C:\Users\lopeze\Documents\SharpDevelop Projects\maevaDeploiement\maevaDeploiement\obj\Debug\maevaDeploiement.pdb
 C:\Users\lopeze\Documents\SharpDevelop Projects\maevaDeploiement\maevaDeploiement\obj\Debug\maevaDeploiement.MainForm.resources
 C:\Users\lopeze\Documents\SharpDevelop Projects\maevaDeploiement\maevaDeploiement\obj\Debug\maevaDeploiement.vbproj.GenerateResource.Cache
+C:\Users\lopeze\Documents\SharpDevelop Projects\maevaDeploiement\maevaDeploiement\obj\Debug\maevaDeploiement.exe
+C:\Users\lopeze\Documents\SharpDevelop Projects\maevaDeploiement\maevaDeploiement\obj\Debug\maevaDeploiement.pdb
+C:\Users\lopeze\Documents\SharpDevelop Projects\maevaDeploiement\maevaDeploiement\obj\Debug\maevaDeploiement.vbprojResolveAssemblyReference.cache
