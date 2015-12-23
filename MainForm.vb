@@ -224,8 +224,11 @@ Public Partial Class MainForm
 		userName = txtUser.Text
 		userPass = txtUser.Text
 		msg = ""
-		cnxString = "integrated security=SSPI;data source=" & sqlServerName & ";" _ 
-			& "persist security info=False;initial catalog=" & databaseName
+		cnxString = "integrated security=SSPI;data source=" _
+			& sqlServerName & ";" _
+			& "persist security info=False;initial catalog=" & databaseName _
+			& ";user=" & txtUser.Text _
+			& ";password=" & txtPass.text
 
 		sqlString = System.IO.File.ReadAllText (txtScript.text)
 		
