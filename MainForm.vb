@@ -296,15 +296,24 @@ Public Partial Class MainForm
 	
 	'--------------------------------------------------------
 	' PROC : Désarchivage de l'archive web
-	'
-	' TODO : 
-	' Gérer l'erreur d'écrasement si les fichiers existent déjà
-	' proposer une demande de confirmation d'écrasement
-	'
 	'---------------------------------------------------------	
 	Sub unZipMaevaWeb()
 		
 		Dim msg As String
+		Dim result As DialogResult
+		
+		' Si le répertoire existe déjà
+		If Directory.Exists(txtDest.Text) Then
+			result = MessageBox.Show("Le répertoire de destination existe déjà." & vbCrLf & _
+				"Si vous continuez, une sauvegarde en sera faite avant de l'écraser." & vbCrLf & _
+				"Souhaitez-vous continuer ?", "Avertissement", MessageBoxButtons.OKCancel)
+		End If
+		' et que le déploiement doit s'ffectuer dans ce même répertoire
+		If result = vbCancel Then
+			Exit Sub
+		Else
+			overWriteDest()
+		End If
 		
 		Try
 			ZipFile.ExtractToDirectory (txtZip.Text, txtDest.Text)
@@ -315,6 +324,39 @@ Public Partial Class MainForm
 			txtLogZip.Text = msg
 	End Sub
 	
+	'--------------------------------------------------------
+	' PROC : Sauvegarde et suppression de l'arborescence 
+	'  		 spécifiée dans le textbox  Destination
+	'---------------------------------------------------------		
+	Sub overWriteDest()
+		
+		Dim msg = ""
+		Dim horodatage As String
+		Dim fromPath As String 
+		Dim toZip As String
+		
+		horodatage = DateTime.now.Year.ToString()
+		horodatage += DateTime.now.Month.ToString()
+		horodatage += DateTime.now.Day.ToString()
+		horodatage += DateTime.now.Hour.ToString()
+		horodatage += DateTime.now.Month.ToString()
+		horodatage += DateTime.now.Second.ToString()
+		
+		fromPath = txtDest.text
+		toZip = txtDest.Text & "_" & horodatage & ".zip"
+		
+		Try
+			ZipFile.CreateFromDirectory(fromPath,toZip)
+			Directory.Delete(txtDest.Text, True)
+			msg ="Le répertoire précédent à été archivés avec succès avant d'être supprimé."
+		Catch e As Exception
+			msg = "ERREUR : " & vbCrLf		
+		End Try
+		
+		txtLogZip.Text = msg
+		
+		
+	End Sub
 	
 	
 End Class

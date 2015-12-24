@@ -106,9 +106,10 @@ Partial Class MainForm
 		'
 		'pictureBox1
 		'
+		Me.pictureBox1.ErrorImage = Nothing
 		Me.pictureBox1.Image = CType(resources.GetObject("pictureBox1.Image"),System.Drawing.Image)
-		Me.pictureBox1.InitialImage = CType(resources.GetObject("pictureBox1.InitialImage"),System.Drawing.Image)
-		Me.pictureBox1.Location = New System.Drawing.Point(4, 4)
+		Me.pictureBox1.InitialImage = Nothing
+		Me.pictureBox1.Location = New System.Drawing.Point(7, 1)
 		Me.pictureBox1.Name = "pictureBox1"
 		Me.pictureBox1.Size = New System.Drawing.Size(430, 80)
 		Me.pictureBox1.TabIndex = 49
@@ -335,9 +336,10 @@ Partial Class MainForm
 		'
 		'pictureBox2
 		'
+		Me.pictureBox2.ErrorImage = Nothing
 		Me.pictureBox2.Image = CType(resources.GetObject("pictureBox2.Image"),System.Drawing.Image)
-		Me.pictureBox2.InitialImage = CType(resources.GetObject("pictureBox2.InitialImage"),System.Drawing.Image)
-		Me.pictureBox2.Location = New System.Drawing.Point(4, 4)
+		Me.pictureBox2.InitialImage = Nothing
+		Me.pictureBox2.Location = New System.Drawing.Point(-1, 7)
 		Me.pictureBox2.Name = "pictureBox2"
 		Me.pictureBox2.Size = New System.Drawing.Size(430, 80)
 		Me.pictureBox2.TabIndex = 50
